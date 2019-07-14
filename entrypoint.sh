@@ -3,27 +3,31 @@
 set -e
 
 print_usage() {
+commands=$(cd /scripts; ls -1 *.py)
 echo "
-
 usage:  $0 COMMAND
 
 Tableau scripts
 
 commands:
-  datasource-publish
-  datasource-metadata
   help                  Print this help
 "
+for c in ${commands}
+do
+    echo "  ${c}"
+done
 }
 
-case "$1" in
+command="$1"
+case "$command" in
     help)
         print_usage
         ;;
-    datasource-publish)
+    *.py)
         shift 1
-        run_datasource_publish "$@"
+        python /scripts/"$command" "$@"
         ;;
     *)
         exec "$@"
+        ;;
 esac
